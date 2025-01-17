@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=4 uid="uid://balqnmv2llmfo"]
+
+[ext_resource type="Texture2D" uid="uid://chgidtk6got0w" path="res://Assets/PNG/ico/combine.png" id="1_8fh8n"]
+[ext_resource type="Script" path="res://Scenes/Temp/physical_board.gd" id="1_77r40"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sjumq"]
+texture = ExtResource("1_8fh8n")
+texture_region_size = Vector2i(160, 160)
+1:0/0 = 0
+2:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+0:0/0 = 0
+2:1/0 = 0
+2:2/0 = 0
+1:2/0 = 0
+0:2/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_oix63"]
+tile_size = Vector2i(160, 160)
+sources/0 = SubResource("TileSetAtlasSource_sjumq")
+
+[node name="Physical Board" type="Node2D" node_paths=PackedStringArray("static_layer", "falling_layer", "bg_layer", "allow_layer")]
+scale = Vector2(0.125, 0.125)
+script = ExtResource("1_77r40")
+static_layer = NodePath("Static Layer")
+falling_layer = NodePath("Falling Layer")
+bg_layer = NodePath("Back Layer")
+allow_layer = NodePath("Allow Layer")
+
+[node name="Static Layer" type="TileMapLayer" parent="."]
+position = Vector2(1437, 1448)
+tile_map_data = PackedByteArray("AAAAAAAAAAABAAAAAAD//wAAAAABAAEAAAD/////AAACAAEAAAAAAP//AAABAAEAAAD9////AAABAAAAAAD9//z/AAACAAAAAAD9//3/AAABAAAAAAD9//7/AAACAAAAAAD+//7/AAABAAAAAAD+////AAACAAAAAAABAAEAAAABAAAAAAACAAEAAAACAAAAAAACAAAAAAABAAAAAAABAP//AAACAAEAAAAAAP7/AAABAAAAAAD///7/AAACAAAAAAD9/wAAAAACAAAAAAD+/wAAAAABAAAAAAD+/wEAAAACAAAAAAD//wEAAAACAAEAAAD9/wEAAAABAAAAAAD9/wIAAAACAAAAAAD+/wIAAAABAAAAAAD//wIAAAABAAEAAAAAAAIAAAACAAEAAAABAAIAAAABAAAAAAACAAIAAAABAAEAAAACAP//AAABAAEAAAACAP7/AAABAAAAAAACAP3/AAACAAAAAAABAP3/AAABAAAAAAAAAP3/AAACAAAAAAD///3/AAABAAAAAAD+//3/AAACAAAAAAABAP7/AAACAAAAAAD8//z/AAABAAAAAAD8//3/AAACAAAAAAD8//7/AAABAAAAAAD8////AAACAAAAAAD8/wAAAAABAAAAAAD8/wEAAAACAAAAAAD8/wIAAAABAAAAAAD8/wMAAAACAAAAAAD9/wMAAAABAAAAAAD+/wMAAAACAAAAAAD//wMAAAACAAEAAAAAAAMAAAACAAAAAAABAAMAAAABAAEAAAACAAMAAAACAAAAAAADAAMAAAABAAEAAAADAAIAAAACAAIAAAADAAEAAAABAAEAAAADAAAAAAACAAIAAAADAP//AAACAAEAAAADAP7/AAACAAAAAAADAP3/AAABAAAAAAADAPz/AAACAAAAAAACAPz/AAABAAAAAAABAPz/AAACAAAAAAAAAPz/AAABAAAAAAD///z/AAACAAAAAAD+//z/AAABAAAAAAABAAAAAAACAAAAAAAAAAEAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_oix63")
+
+[node name="Falling Layer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAD9//v/AAACAAEAAAD+//v/AAACAAEAAAD///v/AAACAAEAAAAAAPv/AAACAAEAAAABAPv/AAACAAEAAAACAPv/AAACAAEAAAD9//r/AAACAAEAAAD///r/AAACAAEAAAAAAPr/AAACAAEAAAACAPr/AAACAAEAAAD+//r/AAACAAEAAAD+//n/AAACAAEAAAAAAPn/AAACAAEAAAABAPr/AAACAAEAAAACAPn/AAACAAEAAAD8//r/AAACAAEAAAD8//n/AAACAAEAAAD9//n/AAACAAEAAAD///n/AAACAAEAAAABAPn/AAACAAEAAAADAPn/AAACAAEAAAADAPr/AAACAAEAAAA=")
+tile_set = SubResource("TileSet_oix63")
+
+[node name="Back Layer" type="TileMapLayer" parent="."]
+tile_set = SubResource("TileSet_oix63")
+
+[node name="Allow Layer" type="TileMapLayer" parent="."]
+tile_set = SubResource("TileSet_oix63")
