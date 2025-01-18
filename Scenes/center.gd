@@ -17,7 +17,6 @@ func _process(delta: float) -> void:
 	self.position.y=(main.size.y-self.size.y)/2
 	board.position=self.size/2
 	board.scale=self.size/board_size
-	print(board.scale, self.size)
 	pass
 
 func set_board_size(new_size: Vector2):

@@ -43,39 +43,13 @@ grow_vertical = 2
 position = Vector2(200, 200)
 
 [node name="Button" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.302222
-anchor_top = 0.7725
-anchor_right = 0.713333
-anchor_bottom = 0.85625
+layout_mode = 0
+anchor_left = 0.32
+anchor_top = 0.8075
+anchor_right = 0.731111
+anchor_bottom = 0.89125
 text = "Run step"
 metadata/_edit_use_anchors_ = true
 
-[node name="RandRest" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.0888889
-anchor_top = 0.1375
-anchor_right = 0.408889
-anchor_bottom = 0.22125
-text = "Fill rest with
-random items"
-metadata/_edit_use_anchors_ = true
-
-[node name="RandAll" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.573333
-anchor_top = 0.135
-anchor_right = 0.893333
-anchor_bottom = 0.21875
-text = "Fill all with
-random items"
-metadata/_edit_use_anchors_ = true
-
-[connection signal="board_editable_signal" from="Center/Physical Board" to="." method="toggle_random_buttons"]
 [connection signal="board_ready_signal" from="Center/Physical Board" to="." method="toggle_play_button"]
 [connection signal="pressed" from="Button" to="Center/Physical Board" method="apply_move"]
-[connection signal="pressed" from="RandRest" to="Center/Physical Board" method="randomise" binds= [false]]
-[connection signal="pressed" from="RandAll" to="Center/Physical Board" method="randomise" binds= [true]]
