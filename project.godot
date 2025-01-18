@@ -11,8 +11,15 @@ config_version=5
 [application]
 
 config/name="hsurCydnaC"
+run/main_scene="res://Scenes/main.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=450
+window/size/viewport_height=800
+window/handheld/orientation=1
 
 [rendering]
 
