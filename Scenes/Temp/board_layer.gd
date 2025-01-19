@@ -3,6 +3,13 @@ class_name BoardLayer extends TileMapLayer
 
 var halfsize:Vector2i
 
+# Setters ---------------------------------------------------------------------------------------- #
+func reset_blank(in_halfsize:Vector2i=Vector2i.ZERO):
+	if in_halfsize!=Vector2i.ZERO:
+		halfsize=in_halfsize
+	var outer_limit:Vector2i=halfsize+Vector2i.ONE
+	self.fill_square(-outer_limit,outer_limit,Vector2i.ONE*3)
+	self.fill_square(-halfsize+Vector2i.UP,halfsize,Vector2i.ZERO)
 
 func fill_square(top_left:Vector2i,bottom_right_lim:Vector2i,value:Vector2i):
 	for i in range(top_left.x,bottom_right_lim.x):
@@ -10,12 +17,16 @@ func fill_square(top_left:Vector2i,bottom_right_lim:Vector2i,value:Vector2i):
 			var loc:Vector2i=Vector2i(i,j)
 			self.set_cell(loc,0,value)
 
-func reset_blank(in_halfsize:Vector2i=Vector2i.ZERO):
-	if in_halfsize!=Vector2i.ZERO:
-		halfsize=in_halfsize
-	var outer_limit:Vector2i=halfsize+Vector2i.ONE
-	self.fill_square(-outer_limit,outer_limit,Vector2i.ONE*3)
-	self.fill_square(-halfsize+Vector2i.UP,halfsize,Vector2i.ZERO)
+func conditional_fill(reference_board:BoardLayer,required:Vector2i,fill:Vector2i):
+	var first=reference_board.halfsize[0]
+	var second=reference_board.halfsize[1]
+	for i in range(-first,first):
+		for j in range(-second,second):
+			var cell=Vector2i(i,j)
+			if reference_board.get_cell_atlas_coords(cell)==required:
+				self.set_cell(cell,0,fill)
+
+# Getters ---------------------------------------------------------------------------------------- #
 func search_for_best_line(dimension:int,row_ind:int)->int:
 	dimension%=2
 	var DIRECTION=[Vector2i.DOWN,Vector2i.RIGHT][dimension]
@@ -98,7 +109,6 @@ func mark_dimension(dimension:int,data:Array[bool],output_board:BoardLayer):
 		mark_count+=temp
 	return mark_count
 
-
 func search_and_mark(output_board:BoardLayer):
 	var whole_cols:Array[bool]=[]
 	var whole_rows:Array[bool]=[]
@@ -115,15 +125,7 @@ func search_and_mark(output_board:BoardLayer):
 	# self.conditional_fill(output_board,Vector2i.ONE,Vector2i.ZERO)
 	return mark_count
 
-func conditional_fill(reference_board:BoardLayer,required:Vector2i,fill:Vector2i):
-	var first=reference_board.halfsize[0]
-	var second=reference_board.halfsize[1]
-	for i in range(-first,first):
-		for j in range(-second,second):
-			var cell=Vector2i(i,j)
-			if reference_board.get_cell_atlas_coords(cell)==required:
-				self.set_cell(cell,0,fill)
-
+# Falling board interactions --------------------------------------------------------------------- #
 func swap_floating(falling_board:BoardLayer):
 	var first=falling_board.halfsize[0]
 	var second=falling_board.halfsize[1]
@@ -138,7 +140,6 @@ func swap_floating(falling_board:BoardLayer):
 			falling_board.set_cell(cell,0,value)
 			self.set_cell(cell,0,Vector2i.ZERO)
 	return
-
 
 func stop_floating(falling_board:BoardLayer, offset:int)->bool:
 	var first=falling_board.halfsize[0]
