@@ -3,6 +3,8 @@ extends Node2D
 
 signal board_ready_signal(status:bool)
 signal board_editable_signal(status:bool)
+signal end_signal(score:int)
+signal score_update_signal(score:int)
 
 @export var static_layer:BoardLayer
 @export var falling_layer:BoardLayer
@@ -10,10 +12,15 @@ signal board_editable_signal(status:bool)
 @export var destroyed_layer:BoardLayer
 @export var halfsize:Vector2i=Vector2i(4,4)
 @export var FALL_SPEED:float=10
+
+var swapper_AI:iSwapper=CurBestSwapper.new()
+var swapper_move:Array[Vector2i]=[]
 var fall_time:float=-1
 var offset:float=0
 var editable:bool=true
 var empties:int=0
+var score:int=0
+var move_failed=false
 var last_edited=Vector2i.ONE*10000001
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -21,6 +28,16 @@ func _ready() -> void:
 	assert(falling_layer)
 	assert(allow_layer)
 	assert(destroyed_layer)
+	restart()
+
+func restart():
+	self.static_layer.reset_blank(halfsize)
+	self.allow_layer.reset_blank(halfsize,Vector2i.RIGHT)
+	initialise(self.halfsize,CurBestSwapper.new())
+
+func initialise(in_halfsize:Vector2i,selected_AI:iSwapper):
+	self.swapper_AI=selected_AI
+	self.halfsize=in_halfsize
 	for layer in [static_layer,falling_layer,allow_layer,destroyed_layer]:
 		layer.halfsize=halfsize
 		layer.show()
@@ -64,9 +81,38 @@ func end_move():
 	allow_layer.conditional_fill(static_layer,Vector2i.ZERO,Vector2i.RIGHT)
 	self.editable=true
 	self.board_editable_signal.emit(true)
-	if empties==0:
-		self.board_ready_signal.emit(true)
+	self.board_ready_signal.emit(false)
+	if empties!=0:
+		score+=empties
+		score_update_signal.emit(score)
+		move_failed=false
 		return
+	if move_failed:
+		end_signal.emit(score)
+		return
+	self.board_ready_signal.emit(true)
+	self.swapper_move=self.swapper_AI.check_swap(self.static_layer)
+	board_ready_signal.emit(false)
+	$"First Timer".start()
+
+func game_step_2():
+	for tile in self.swapper_move:
+		self.allow_layer.set_cell(tile,0,Vector2i.RIGHT*2)
+	# highlight both positions
+	$"Second Timer".start()
+
+func game_step_3():
+	board_ready_signal.emit(empties==0)
+	var first=self.swapper_move[0]
+	var second=self.swapper_move[1]
+	var first_val=self.static_layer.get_cell_atlas_coords(first)
+	var second_val=self.static_layer.get_cell_atlas_coords(second)
+	self.static_layer.set_cell(first,0,second_val)
+	self.static_layer.set_cell(second,0,first_val)
+	for tile in self.swapper_move:
+		self.allow_layer.set_cell(tile,0,Vector2i.RIGHT)
+	move_failed=true
+	apply_move()
 
 func swap_nodes(first:Vector2i, second: Vector2i):
 	var val1:Vector2i=static_layer.get_cell_atlas_coords(first)
@@ -119,3 +165,5 @@ func randomise(force:bool):
 			var value=randi_range(1,8)
 			var new=Vector2i(value%3,value/3)
 			self.static_layer.set_cell(cur,0,new)
+	self.empties=0
+	self.board_ready_signal.emit(true)

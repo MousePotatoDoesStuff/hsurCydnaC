@@ -43,7 +43,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -95,6 +95,15 @@
        d="M 26.458334,15.875 V 13.229167 L 13.229167,26.458334 H 15.875 Z"
        id="path853"
        sodipodi:nodetypes="ccccc"
+       inkscape:export-xdpi="153.60001"
+       inkscape:export-ydpi="153.60001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke-width:0.15625;stroke-linecap:square;stroke-opacity:0"
+       id="rect836"
+       width="26.458334"
+       height="26.458334"
+       x="52.916668"
+       y="0"
        inkscape:export-xdpi="153.60001"
        inkscape:export-ydpi="153.60001" />
   </g>

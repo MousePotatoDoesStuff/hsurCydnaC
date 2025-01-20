@@ -8,6 +8,7 @@ func is_valid_swap(swap:Array[Vector2i]):
 	if len(swap)!=2:
 		return false
 	var diff:Vector2i=swap[0]-swap[1]
+	return diff.length()==1
 
 func check_swap(grid:BoardLayer)->Array[Vector2i]:
 	var res:Array[Vector2i]=self.make_swap(grid)

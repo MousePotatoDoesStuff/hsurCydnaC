@@ -1,0 +1,81 @@
+[gd_scene load_steps=4 format=3 uid="uid://dq4g0ohalugo0"]
+
+[ext_resource type="PackedScene" uid="uid://balqnmv2llmfo" path="res://Scenes/Temp/physical_board.tscn" id="1_1ngjs"]
+[ext_resource type="Script" path="res://Scenes/center.gd" id="1_8h1gg"]
+[ext_resource type="Script" path="res://Scenes/main.gd" id="1_aeoj5"]
+
+[node name="Main" type="Control" node_paths=PackedStringArray("play_button")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_aeoj5")
+play_button = NodePath("Button")
+
+[node name="Center" type="Control" parent="." node_paths=PackedStringArray("board", "main")]
+layout_mode = 1
+anchor_left = 0.056
+anchor_top = 0.5
+anchor_right = 0.944
+anchor_bottom = 0.5
+offset_left = -0.200001
+offset_top = -200.0
+offset_right = 0.199982
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8h1gg")
+board = NodePath("Physical Board")
+main = NodePath("..")
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="Center"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Physical Board" parent="Center" instance=ExtResource("1_1ngjs")]
+position = Vector2(200, 200)
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.302222
+anchor_top = 0.7725
+anchor_right = 0.713333
+anchor_bottom = 0.85625
+text = "Run step"
+metadata/_edit_use_anchors_ = true
+
+[node name="RandRest" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0888889
+anchor_top = 0.1375
+anchor_right = 0.408889
+anchor_bottom = 0.22125
+text = "Fill rest with
+random items"
+metadata/_edit_use_anchors_ = true
+
+[node name="RandAll" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.573333
+anchor_top = 0.135
+anchor_right = 0.893333
+anchor_bottom = 0.21875
+text = "Fill all with
+random items"
+metadata/_edit_use_anchors_ = true
+
+[connection signal="board_editable_signal" from="Center/Physical Board" to="." method="toggle_random_buttons"]
+[connection signal="board_ready_signal" from="Center/Physical Board" to="." method="toggle_play_button"]
+[connection signal="pressed" from="Button" to="Center/Physical Board" method="apply_move"]
+[connection signal="pressed" from="RandRest" to="Center/Physical Board" method="randomise" binds= [false]]
+[connection signal="pressed" from="RandAll" to="Center/Physical Board" method="randomise" binds= [true]]

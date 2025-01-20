@@ -1,10 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://dq4g0ohalugo0"]
+[gd_scene load_steps=5 format=3 uid="uid://dq4g0ohalugo0"]
 
 [ext_resource type="PackedScene" uid="uid://balqnmv2llmfo" path="res://Scenes/Temp/physical_board.tscn" id="1_1ngjs"]
 [ext_resource type="Script" path="res://Scenes/center.gd" id="1_8h1gg"]
 [ext_resource type="Script" path="res://Scenes/main.gd" id="1_aeoj5"]
 
-[node name="Main" type="Control" node_paths=PackedStringArray("play_button")]
+[sub_resource type="Theme" id="Theme_g7m5j"]
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/icon_normal_color = Color(1, 1, 1, 1)
+Button/font_sizes/font_size = 42
+
+[node name="Main" type="Control" node_paths=PackedStringArray("play_button", "random_buttons", "score_text", "win_text")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,6 +18,9 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_aeoj5")
 play_button = NodePath("Button")
+random_buttons = [NodePath("RandRest"), NodePath("RandAll")]
+score_text = NodePath("RichTextLabel")
+win_text = NodePath("ColorRect/ColorRect/RichTextLabel")
 
 [node name="Center" type="Control" parent="." node_paths=PackedStringArray("board", "main")]
 layout_mode = 1
@@ -45,20 +53,20 @@ position = Vector2(200, 200)
 [node name="Button" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.302222
-anchor_top = 0.7725
-anchor_right = 0.713333
-anchor_bottom = 0.85625
+anchor_left = 0.297778
+anchor_top = 0.87
+anchor_right = 0.708889
+anchor_bottom = 0.95375
 text = "Run step"
 metadata/_edit_use_anchors_ = true
 
 [node name="RandRest" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.0888889
-anchor_top = 0.1375
-anchor_right = 0.408889
-anchor_bottom = 0.22125
+anchor_left = 0.0666667
+anchor_top = 0.77
+anchor_right = 0.386667
+anchor_bottom = 0.85375
 text = "Fill rest with
 random items"
 metadata/_edit_use_anchors_ = true
@@ -66,16 +74,73 @@ metadata/_edit_use_anchors_ = true
 [node name="RandAll" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.573333
-anchor_top = 0.135
-anchor_right = 0.893333
-anchor_bottom = 0.21875
+anchor_left = 0.551111
+anchor_top = 0.7675
+anchor_right = 0.871111
+anchor_bottom = 0.85125
 text = "Fill all with
 random items"
 metadata/_edit_use_anchors_ = true
 
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+anchor_left = 0.151111
+anchor_top = 0.055
+anchor_right = 0.804444
+anchor_bottom = 0.2025
+bbcode_enabled = true
+text = "[center]Score: wasd"
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 1, 0, 0.501961)
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 80.0
+offset_top = 312.0
+offset_right = -98.0
+offset_bottom = -282.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.309804, 0, 1)
+
+[node name="Button" type="Button" parent="ColorRect/ColorRect"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 108.0
+offset_right = 219.0
+offset_bottom = 183.0
+theme = SubResource("Theme_g7m5j")
+text = "Restart"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ColorRect/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 33.0
+offset_bottom = -118.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[center] TEST"
+
 [connection signal="board_editable_signal" from="Center/Physical Board" to="." method="toggle_random_buttons"]
 [connection signal="board_ready_signal" from="Center/Physical Board" to="." method="toggle_play_button"]
+[connection signal="end_signal" from="Center/Physical Board" to="." method="win"]
+[connection signal="score_update_signal" from="Center/Physical Board" to="." method="display_score"]
 [connection signal="pressed" from="Button" to="Center/Physical Board" method="apply_move"]
 [connection signal="pressed" from="RandRest" to="Center/Physical Board" method="randomise" binds= [false]]
 [connection signal="pressed" from="RandAll" to="Center/Physical Board" method="randomise" binds= [true]]
+[connection signal="pressed" from="ColorRect/ColorRect/Button" to="." method="restart"]
