@@ -37,6 +37,7 @@ func win(score: int) -> void:
 		self.best=score
 	else:
 		msg="\nBest: "+str(self.best)
+	score=0
 	win_text.text="[center]Score: "+str(score)+msg
 	$ColorRect.show()
 
@@ -44,3 +45,4 @@ func win(score: int) -> void:
 func restart() -> void:
 	$ColorRect.hide()
 	$"Center/Physical Board".restart()
+	display_score(0)
