@@ -33,6 +33,7 @@ func _ready() -> void:
 	restart()
 
 func restart():
+	score=0
 	self.static_layer.reset_blank(halfsize)
 	self.allow_layer.reset_blank(halfsize,Vector2i.RIGHT)
 	initialise(self.halfsize,CurBestSwapper.new())
