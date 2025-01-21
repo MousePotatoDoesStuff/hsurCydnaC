@@ -37,7 +37,6 @@ func win(score: int) -> void:
 		self.best=score
 	else:
 		msg="\nBest: "+str(self.best)
-	score=0
 	win_text.text="[center]Score: "+str(score)+msg
 	$ColorRect.show()
 

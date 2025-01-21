@@ -13,6 +13,8 @@ signal score_update_signal(score:int)
 @export var halfsize:Vector2i=Vector2i(4,4)
 @export var FALL_SPEED:float=10
 
+@export var soundplayer:AudioStreamPlayer
+
 var swapper_AI:iSwapper=CurBestSwapper.new()
 var swapper_move:Array[Vector2i]=[]
 var fall_time:float=-1
@@ -42,6 +44,7 @@ func initialise(in_halfsize:Vector2i,selected_AI:iSwapper):
 		layer.halfsize=halfsize
 		layer.show()
 	destroyed_layer.hide()
+	randomise(true)
 	apply_move()
 
 
@@ -70,6 +73,8 @@ func apply_move():
 	self.board_ready_signal.emit(false)
 	self.empties+=static_layer.search_and_mark(destroyed_layer)
 	print(self.empties)
+	if self.empties!=0:
+		soundplayer.play()
 	static_layer.conditional_fill(destroyed_layer,Vector2i.RIGHT,Vector2i.ZERO)
 	destroyed_layer.fill_square(-self.halfsize,self.halfsize,Vector2i.ZERO)
 	falling_layer.fill_square(-halfsize,halfsize,Vector2i.ZERO)
@@ -90,6 +95,7 @@ func end_move():
 	if move_failed:
 		end_signal.emit(score)
 		return
+	$SoundPlayer2.play()
 	self.board_ready_signal.emit(true)
 	self.swapper_move=self.swapper_AI.check_swap(self.static_layer)
 	board_ready_signal.emit(false)

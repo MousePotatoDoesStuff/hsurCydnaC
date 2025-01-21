@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dq4g0ohalugo0"]
+[gd_scene load_steps=7 format=3 uid="uid://dq4g0ohalugo0"]
 
 [ext_resource type="PackedScene" uid="uid://balqnmv2llmfo" path="res://Scenes/Temp/physical_board.tscn" id="1_1ngjs"]
 [ext_resource type="Script" path="res://Scenes/center.gd" id="1_8h1gg"]
 [ext_resource type="Script" path="res://Scenes/main.gd" id="1_aeoj5"]
+[ext_resource type="Script" path="res://Scenes/credit_rect.gd" id="4_axd17"]
+[ext_resource type="AudioStream" uid="uid://cun6ofqgg012b" path="res://Assets/Master of the Feast.mp3" id="4_fox8g"]
 
 [sub_resource type="Theme" id="Theme_g7m5j"]
 Button/colors/font_color = Color(1, 1, 1, 1)
@@ -58,6 +60,16 @@ anchor_top = 0.87
 anchor_right = 0.708889
 anchor_bottom = 0.95375
 text = "Run step"
+metadata/_edit_use_anchors_ = true
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.68
+anchor_top = 0.0175
+anchor_right = 0.957778
+anchor_bottom = 0.07875
+text = "Credits"
 metadata/_edit_use_anchors_ = true
 
 [node name="RandRest" type="Button" parent="."]
@@ -149,11 +161,74 @@ grow_vertical = 2
 bbcode_enabled = true
 text = "[center] TEST"
 
+[node name="CreditRect" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.501961)
+script = ExtResource("4_axd17")
+
+[node name="ColorRect" type="ColorRect" parent="CreditRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 34.0
+offset_top = 72.0
+offset_right = -14.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.309804, 0, 1)
+
+[node name="Button" type="Button" parent="CreditRect/ColorRect"]
+layout_mode = 0
+offset_left = 34.0
+offset_top = 542.0
+offset_right = 373.0
+offset_bottom = 653.0
+theme = SubResource("Theme_g7m5j")
+text = "Return"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CreditRect/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 13.0
+offset_bottom = -164.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[center]Credits:
+
+Texture pack:
+https://craftpix.net/freebies/free-candy-match-3-game-items/
+
+Soundtrack:
+ \"Master of the Feast\" Kevin MacLeod (incompetech.com)
+Licensed under Creative Commons: By Attribution 4.0 License
+http://creativecommons.org/licenses/by/4.0/
+
+crunch 7.wav by theplax -- https://freesound.org/s/608641/ -- License: Attribution 4.0
+Cookie Jar Open and Shut by danehager -- https://freesound.org/s/235693/ -- License: Attribution 3.0"
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_fox8g")
+autoplay = true
+parameters/looping = true
+
 [connection signal="board_editable_signal" from="Center/Physical Board" to="." method="toggle_random_buttons"]
 [connection signal="board_ready_signal" from="Center/Physical Board" to="." method="toggle_play_button"]
 [connection signal="end_signal" from="Center/Physical Board" to="." method="win"]
 [connection signal="score_update_signal" from="Center/Physical Board" to="." method="display_score"]
 [connection signal="pressed" from="Button" to="Center/Physical Board" method="apply_move"]
+[connection signal="pressed" from="Button2" to="CreditRect" method="open"]
 [connection signal="pressed" from="RandRest" to="Center/Physical Board" method="randomise" binds= [false]]
 [connection signal="pressed" from="RandAll" to="Center/Physical Board" method="randomise" binds= [true]]
 [connection signal="pressed" from="ColorRect/ColorRect/Button" to="." method="restart"]
+[connection signal="pressed" from="CreditRect/ColorRect/Button" to="CreditRect" method="close"]
