@@ -46,7 +46,13 @@ func initialise(in_halfsize:Vector2i,selected_AI:iSwapper):
 		layer.show()
 	destroyed_layer.hide()
 	randomise(true)
+	self.editable=false
+	self.update_buttons()
 	apply_move()
+
+func update_buttons():
+	self.board_editable_signal.emit(self.editable)
+	self.board_ready_signal.emit(self.editable and self.empties==0)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -71,7 +77,7 @@ func _process(delta: float) -> void:
 
 func apply_move():
 	self.editable=false
-	self.board_ready_signal.emit(false)
+	self.update_buttons()
 	self.empties+=static_layer.search_and_mark(destroyed_layer)
 	print(self.empties)
 	if self.empties!=0:
@@ -86,20 +92,17 @@ func apply_move():
 func end_move():
 	allow_layer.conditional_fill(static_layer,Vector2i.ZERO,Vector2i.RIGHT)
 	self.editable=true
-	self.board_editable_signal.emit(true)
-	self.board_ready_signal.emit(false)
 	if empties!=0:
 		score+=empties
 		score_update_signal.emit(score)
 		move_failed=false
+		self.update_buttons()
 		return
 	if move_failed:
 		end_signal.emit(score)
 		return
 	$SoundPlayer2.play()
-	self.board_ready_signal.emit(true)
 	self.swapper_move=self.swapper_AI.check_swap(self.static_layer)
-	board_ready_signal.emit(false)
 	$"First Timer".start()
 
 func game_step_2():

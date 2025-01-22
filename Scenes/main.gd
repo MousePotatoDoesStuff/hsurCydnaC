@@ -19,11 +19,11 @@ func _process(_delta: float) -> void:
 
 func toggle_play_button(status: bool) -> void:
 	play_button.disabled=not status
-	toggle_random_buttons(status)
 
 
 func toggle_random_buttons(status: bool) -> void:
-	play_button.disabled=not status
+	for button in random_buttons:
+		button.disabled=not status
 
 
 func display_score(score: int) -> void:
@@ -33,7 +33,9 @@ func display_score(score: int) -> void:
 
 func win(score: int) -> void:
 	var msg="\nNew best!"
-	if score<self.best:
+	if score==0:
+		msg="[center]\nNew best...???"
+	elif score<self.best:
 		self.best=score
 	else:
 		msg="\nBest: "+str(self.best)

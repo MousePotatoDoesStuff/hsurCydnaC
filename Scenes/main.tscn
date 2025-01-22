@@ -9,7 +9,8 @@
 [sub_resource type="Theme" id="Theme_g7m5j"]
 Button/colors/font_color = Color(1, 1, 1, 1)
 Button/colors/icon_normal_color = Color(1, 1, 1, 1)
-Button/font_sizes/font_size = 42
+Button/font_sizes/font_size = 22
+Button/fonts/font = null
 
 [node name="Main" type="Control" node_paths=PackedStringArray("play_button", "random_buttons", "score_text", "win_text")]
 layout_mode = 3
@@ -19,8 +20,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_aeoj5")
-play_button = NodePath("Button")
-random_buttons = [NodePath("RandRest"), NodePath("RandAll")]
+play_button = NodePath("Center/Button")
+random_buttons = [NodePath("Center/RandRest"), NodePath("Center/RandAll")]
 score_text = NodePath("RichTextLabel")
 win_text = NodePath("ColorRect/ColorRect/RichTextLabel")
 
@@ -52,14 +53,45 @@ grow_vertical = 2
 [node name="Physical Board" parent="Center" instance=ExtResource("1_1ngjs")]
 position = Vector2(200, 200)
 
-[node name="Button" type="Button" parent="."]
+[node name="Button" type="Button" parent="Center"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.297778
-anchor_top = 0.87
-anchor_right = 0.708889
-anchor_bottom = 0.95375
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.402
+offset_top = 104.0
+offset_right = -4.99997
+offset_bottom = 0.199951
 text = "Run step"
+metadata/_edit_use_anchors_ = true
+
+[node name="RandRest" type="Button" parent="Center"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 0.483
+anchor_bottom = 1.0
+offset_left = 5.00002
+offset_top = 16.0
+offset_right = -0.199997
+offset_bottom = 80.0
+text = "Fill rest with
+random items"
+metadata/_edit_use_anchors_ = true
+
+[node name="RandAll" type="Button" parent="Center"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.521111
+anchor_top = 1.0
+anchor_right = 0.993
+anchor_bottom = 1.0
+offset_left = 2.55556
+offset_top = 14.0
+offset_right = -0.199982
+offset_bottom = 82.0
+text = "Fill all with
+random items"
 metadata/_edit_use_anchors_ = true
 
 [node name="Button2" type="Button" parent="."]
@@ -70,28 +102,6 @@ anchor_top = 0.0175
 anchor_right = 0.957778
 anchor_bottom = 0.07875
 text = "Credits"
-metadata/_edit_use_anchors_ = true
-
-[node name="RandRest" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.0666667
-anchor_top = 0.77
-anchor_right = 0.386667
-anchor_bottom = 0.85375
-text = "Fill rest with
-random items"
-metadata/_edit_use_anchors_ = true
-
-[node name="RandAll" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.551111
-anchor_top = 0.7675
-anchor_right = 0.871111
-anchor_bottom = 0.85125
-text = "Fill all with
-random items"
 metadata/_edit_use_anchors_ = true
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
@@ -129,37 +139,38 @@ color = Color(0, 1, 0, 0.501961)
 
 [node name="ColorRect" type="ColorRect" parent="ColorRect"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 80.0
-offset_top = 312.0
-offset_right = -98.0
-offset_bottom = -282.0
+anchors_preset = -1
+anchor_left = 0.177778
+anchor_top = 0.39
+anchor_right = 0.782222
+anchor_bottom = 0.6475
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0.309804, 0, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="Button" type="Button" parent="ColorRect/ColorRect"]
-layout_mode = 0
-offset_left = 52.0
-offset_top = 108.0
-offset_right = 219.0
-offset_bottom = 183.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.191176
+anchor_top = 0.524272
+anchor_right = 0.805147
+anchor_bottom = 0.88835
 theme = SubResource("Theme_g7m5j")
 text = "Restart"
+metadata/_edit_use_anchors_ = true
 
 [node name="RichTextLabel" type="RichTextLabel" parent="ColorRect/ColorRect"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
+anchor_top = 0.160194
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 33.0
-offset_bottom = -118.0
+anchor_bottom = 0.427184
 grow_horizontal = 2
 grow_vertical = 2
 bbcode_enabled = true
 text = "[center] TEST"
+metadata/_edit_use_anchors_ = true
 
 [node name="CreditRect" type="ColorRect" parent="."]
 visible = false
@@ -174,25 +185,28 @@ script = ExtResource("4_axd17")
 
 [node name="ColorRect" type="ColorRect" parent="CreditRect"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 34.0
-offset_top = 72.0
-offset_right = -14.0
-offset_bottom = -48.0
+anchors_preset = -1
+anchor_left = 0.0755556
+anchor_top = 0.09
+anchor_right = 0.968889
+anchor_bottom = 0.94
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0.309804, 0, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="Button" type="Button" parent="CreditRect/ColorRect"]
-layout_mode = 0
-offset_left = 34.0
-offset_top = 542.0
-offset_right = 373.0
-offset_bottom = 653.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.085
+anchor_top = 0.96
+anchor_right = 0.927861
+anchor_bottom = 0.960294
+offset_left = -0.170002
+offset_top = -110.8
 theme = SubResource("Theme_g7m5j")
 text = "Return"
+metadata/_edit_use_anchors_ = true
 
 [node name="RichTextLabel" type="RichTextLabel" parent="CreditRect/ColorRect"]
 layout_mode = 1
@@ -226,9 +240,9 @@ parameters/looping = true
 [connection signal="board_ready_signal" from="Center/Physical Board" to="." method="toggle_play_button"]
 [connection signal="end_signal" from="Center/Physical Board" to="." method="win"]
 [connection signal="score_update_signal" from="Center/Physical Board" to="." method="display_score"]
-[connection signal="pressed" from="Button" to="Center/Physical Board" method="apply_move"]
+[connection signal="pressed" from="Center/Button" to="Center/Physical Board" method="apply_move"]
+[connection signal="pressed" from="Center/RandRest" to="Center/Physical Board" method="randomise" binds= [false]]
+[connection signal="pressed" from="Center/RandAll" to="Center/Physical Board" method="randomise" binds= [true]]
 [connection signal="pressed" from="Button2" to="CreditRect" method="open"]
-[connection signal="pressed" from="RandRest" to="Center/Physical Board" method="randomise" binds= [false]]
-[connection signal="pressed" from="RandAll" to="Center/Physical Board" method="randomise" binds= [true]]
 [connection signal="pressed" from="ColorRect/ColorRect/Button" to="." method="restart"]
 [connection signal="pressed" from="CreditRect/ColorRect/Button" to="CreditRect" method="close"]
