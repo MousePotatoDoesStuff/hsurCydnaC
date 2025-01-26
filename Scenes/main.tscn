@@ -104,6 +104,16 @@ anchor_bottom = 0.07875
 text = "Credits"
 metadata/_edit_use_anchors_ = true
 
+[node name="Button3" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.04
+anchor_top = 0.0175
+anchor_right = 0.317778
+anchor_bottom = 0.07875
+text = "Instructions"
+metadata/_edit_use_anchors_ = true
+
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 1
 anchors_preset = -1
@@ -231,10 +241,60 @@ http://creativecommons.org/licenses/by/4.0/
 crunch 7.wav by theplax -- https://freesound.org/s/608641/ -- License: Attribution 4.0
 Cookie Jar Open and Shut by danehager -- https://freesound.org/s/235693/ -- License: Attribution 3.0"
 
+[node name="InstructionRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.501961)
+script = ExtResource("4_axd17")
+
+[node name="ColorRect" type="ColorRect" parent="InstructionRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0755556
+anchor_top = 0.09
+anchor_right = 0.968889
+anchor_bottom = 0.94
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.309804, 0, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Button" type="Button" parent="InstructionRect/ColorRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.085
+anchor_top = 0.96
+anchor_right = 0.927861
+anchor_bottom = 0.960294
+offset_left = -0.170002
+offset_top = -110.8
+theme = SubResource("Theme_g7m5j")
+text = "Return"
+metadata/_edit_use_anchors_ = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="InstructionRect/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 13.0
+offset_bottom = -164.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[center]Instructions
+
+You play as the AI behind the classic candy-matching game. How long will it take you to trap the player in an unwinnable state?
+
+Click or drag over empty spaces to fill them with candy. Press the middle bottom button to advance the game."
+
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_fox8g")
 autoplay = true
-parameters/looping = true
 
 [connection signal="board_editable_signal" from="Center/Physical Board" to="." method="toggle_random_buttons"]
 [connection signal="board_ready_signal" from="Center/Physical Board" to="." method="toggle_play_button"]
@@ -244,5 +304,7 @@ parameters/looping = true
 [connection signal="pressed" from="Center/RandRest" to="Center/Physical Board" method="randomise" binds= [false]]
 [connection signal="pressed" from="Center/RandAll" to="Center/Physical Board" method="randomise" binds= [true]]
 [connection signal="pressed" from="Button2" to="CreditRect" method="open"]
+[connection signal="pressed" from="Button3" to="InstructionRect" method="open"]
 [connection signal="pressed" from="ColorRect/ColorRect/Button" to="." method="restart"]
 [connection signal="pressed" from="CreditRect/ColorRect/Button" to="CreditRect" method="close"]
+[connection signal="pressed" from="InstructionRect/ColorRect/Button" to="InstructionRect" method="close"]
