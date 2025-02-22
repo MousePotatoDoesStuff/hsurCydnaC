@@ -10,6 +10,7 @@ signal score_update_signal(score:int)
 @export var falling_layer:BoardLayer
 @export var allow_layer:BoardLayer
 @export var destroyed_layer:BoardLayer
+@export var marked_layer:BoardLayer
 @export var halfsize:Vector2i=Vector2i(4,4)
 @export var FALL_SPEED:float=10
 
@@ -26,11 +27,22 @@ var move_failed=false
 var last_edited=Vector2i.ONE*10000001
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	assert(static_layer)
-	assert(falling_layer)
-	assert(allow_layer)
-	assert(destroyed_layer)
+	for el in self.getAllLayers():
+		assert(el)
 	restart()
+
+func getAllLayers()->Array[BoardLayer]:
+	return [
+		static_layer,
+		falling_layer,
+		allow_layer,
+		destroyed_layer,
+		marked_layer
+	]
+
+func set_halfsizes():
+	for el in self.getAllLayers():
+		el.halfsize=self.halfsize
 
 func restart():
 	score=0
@@ -41,6 +53,7 @@ func restart():
 func initialise(in_halfsize:Vector2i,selected_AI:iSwapper):
 	self.swapper_AI=selected_AI
 	self.halfsize=in_halfsize
+	self.set_halfsizes()
 	for layer in [static_layer,falling_layer,allow_layer,destroyed_layer]:
 		layer.halfsize=halfsize
 		layer.show()
@@ -78,7 +91,15 @@ func _process(delta: float) -> void:
 func apply_move():
 	self.editable=false
 	self.update_buttons()
-	self.empties+=static_layer.search_and_mark(destroyed_layer)
+	static_layer.create_marked_board(marked_layer)
+	var rules:Array[BoardRule]=[
+		BoardRule.new(3,0,4),
+		LineBoardRule.new(4,0,5),
+		DeleteAllRule.new(5,0)
+	]
+	rules[2].score_per_tile=1000
+	for rule in rules:
+		self.empties+=rule.apply(static_layer,marked_layer,destroyed_layer)
 	print(self.empties)
 	if self.empties!=0:
 		soundplayer.play()
@@ -146,7 +167,9 @@ func change_tile():
 	if grid_position==self.last_edited:
 		return
 	for i in range(2):
-		if grid_position[i] not in range(-self.halfsize[i],self.halfsize[i]):
+		if grid_position[i]<-self.halfsize[i]:
+			return
+		if grid_position[i]>=self.halfsize[i]:
 			return
 	self.last_edited=grid_position
 	if self.allow_layer.get_cell_atlas_coords(grid_position)==Vector2i.ZERO:

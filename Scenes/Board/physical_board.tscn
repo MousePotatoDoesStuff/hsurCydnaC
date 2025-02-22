@@ -1,19 +1,21 @@
-[gd_scene load_steps=7 format=4 uid="uid://balqnmv2llmfo"]
+[gd_scene load_steps=8 format=4 uid="uid://balqnmv2llmfo"]
 
-[ext_resource type="Script" path="res://Scenes/Temp/physical_board.gd" id="1_77r40"]
+[ext_resource type="Script" path="res://Scenes/Board/physical_board.gd" id="1_77r40"]
 [ext_resource type="TileSet" uid="uid://dgh0kx2phbldh" path="res://Assets/PNG/tilesets/combine.tres" id="2_lu6sc"]
-[ext_resource type="Script" path="res://Scenes/Temp/board_layer.gd" id="3_vco66"]
+[ext_resource type="Script" path="res://Scenes/Board/board_layer.gd" id="3_vco66"]
 [ext_resource type="TileSet" uid="uid://n8h82ftv8kgw" path="res://Assets/PNG/tilesets/allow.tres" id="4_rvh40"]
 [ext_resource type="AudioStream" uid="uid://c7ntnuwo42rmc" path="res://Assets/608641__theplax__crunch-7.wav" id="5_ci4w2"]
+[ext_resource type="TileSet" uid="uid://sfv3ytkpiys2" path="res://Assets/PNG/tilesets/test_1.tres" id="5_d5qd8"]
 [ext_resource type="AudioStream" uid="uid://daprd4wmtghik" path="res://Assets/235693__danehager__cookie-jar-open-and-shut.wav" id="6_atef4"]
 
-[node name="Physical Board" type="Node2D" node_paths=PackedStringArray("static_layer", "falling_layer", "allow_layer", "destroyed_layer", "soundplayer")]
+[node name="Physical Board" type="Node2D" node_paths=PackedStringArray("static_layer", "falling_layer", "allow_layer", "destroyed_layer", "marked_layer", "soundplayer")]
 scale = Vector2(0.125, 0.125)
 script = ExtResource("1_77r40")
 static_layer = NodePath("Static Layer")
 falling_layer = NodePath("Falling Layer")
 allow_layer = NodePath("Allow Layer")
 destroyed_layer = NodePath("Destroyed Layer")
+marked_layer = NodePath("MarkedLayer")
 soundplayer = NodePath("SoundPlayer")
 
 [node name="Static Layer" type="TileMapLayer" parent="."]
@@ -35,6 +37,13 @@ script = ExtResource("3_vco66")
 visible = false
 tile_map_data = PackedByteArray("AAD8//z/AAAAAAAAAAD8//3/AAAAAAAAAAD8//7/AAAAAAAAAAD8////AAAAAAAAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAAAAAD8/wMAAAAAAAAAAAD9/wMAAAAAAAAAAAD+/wMAAAAAAAAAAAD//wMAAAAAAAAAAAAAAAMAAAAAAAAAAAABAAMAAAAAAAAAAAACAAMAAAAAAAAAAAADAAMAAAAAAAAAAAADAAIAAAAAAAAAAAACAAIAAAAAAAAAAAABAAIAAAAAAAAAAAAAAAIAAAAAAAAAAAD//wIAAAAAAAAAAAD+/wIAAAAAAAAAAAD9/wIAAAAAAAAAAAD9/wEAAAAAAAAAAAD+/wEAAAAAAAAAAAD//wEAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAEAAAAAAAAAAAADAAAAAAAAAAAAAAACAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wAAAAAAAAAAAAD+/wAAAAAAAAAAAAD9/wAAAAAAAAAAAAD9////AAAAAAAAAAD+////AAAAAAAAAAD/////AAAAAAAAAAAAAP//AAAAAAAAAAABAP//AAAAAAAAAAACAP//AAAAAAAAAAADAP//AAAAAAAAAAADAP7/AAAAAAAAAAACAP7/AAAAAAAAAAABAP7/AAAAAAAAAAAAAP7/AAAAAAAAAAD///7/AAAAAAAAAAD+//7/AAAAAAAAAAD9//7/AAAAAAAAAAD9//3/AAAAAAAAAAD+//3/AAAAAAAAAAD///3/AAAAAAAAAAAAAP3/AAAAAAAAAAABAP3/AAAAAAAAAAACAP3/AAAAAAAAAAADAP3/AAAAAAAAAAADAPz/AAAAAAAAAAACAPz/AAAAAAAAAAABAPz/AAAAAAAAAAAAAPz/AAAAAAAAAAD///z/AAAAAAAAAAD+//z/AAAAAAAAAAD9//z/AAAAAAAAAAA=")
 tile_set = ExtResource("4_rvh40")
+script = ExtResource("3_vco66")
+
+[node name="MarkedLayer" type="TileMapLayer" parent="."]
+visible = false
+scale = Vector2(10, 10)
+tile_map_data = PackedByteArray("AAD8//z/AAAAAAAAAAD8//3/AAAAAAAAAAD8//7/AAAAAAAAAAD8////AAAAAAAAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAAAAAD8/wMAAAAAAAAAAAD9/wMAAAAAAAAAAAD+/wMAAAAAAAAAAAD//wMAAAAAAAAAAAAAAAMAAAAAAAAAAAABAAMAAAAAAAAAAAACAAMAAAAAAAAAAAADAAMAAAAAAAAAAAADAAIAAAAAAAAAAAACAAIAAAAAAAAAAAABAAIAAAAAAAAAAAAAAAIAAAAAAAAAAAD//wIAAAAAAAAAAAD+/wIAAAAAAAAAAAD9/wIAAAAAAAAAAAD9/wEAAAAAAAAAAAD+/wEAAAAAAAAAAAD//wEAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAEAAAAAAAAAAAADAAAAAAAAAAAAAAACAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wAAAAAAAAAAAAD+/wAAAAAAAAAAAAD9/wAAAAAAAAAAAAD9////AAAAAAAAAAD+////AAAAAAAAAAD/////AAAAAAAAAAAAAP//AAAAAAAAAAABAP//AAAAAAAAAAACAP//AAAAAAAAAAADAP//AAAAAAAAAAADAP7/AAAAAAAAAAACAP7/AAAAAAAAAAABAP7/AAAAAAAAAAAAAP7/AAAAAAAAAAD///7/AAAAAAAAAAD+//7/AAAAAAAAAAD9//7/AAAAAAAAAAD9//3/AAAAAAAAAAD+//3/AAAAAAAAAAD///3/AAAAAAAAAAAAAP3/AAAAAAAAAAABAP3/AAAAAAAAAAACAP3/AAAAAAAAAAADAP3/AAAAAAAAAAADAPz/AAAAAAAAAAACAPz/AAAAAAAAAAABAPz/AAAAAAAAAAAAAPz/AAAAAAAAAAD///z/AAAAAAAAAAD+//z/AAAAAAAAAAD9//z/AAAAAAAAAAA=")
+tile_set = ExtResource("5_d5qd8")
 script = ExtResource("3_vco66")
 
 [node name="First Timer" type="Timer" parent="."]

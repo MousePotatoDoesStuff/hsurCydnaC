@@ -79,147 +79,43 @@ func get_best_swap():
 					continue
 				best=[v1,v2]
 				best_val=cur
-				print(best,best_val)
 	return best
 
-func search_for_best_line(dimension:int,row_ind:int)->int:
+func cmb_line(dimension:int,row_ind:int,marked_board:BoardLayer):
 	dimension%=2
-	var DIRECTION=[Vector2i.DOWN,Vector2i.RIGHT][dimension]
+	var DIRECTION=[Vector2i.RIGHT,Vector2i.DOWN][dimension]
 	
-	var last:int=-self.halfsize[dimension]
-	var cur_cell=[Vector2i(row_ind,last),Vector2i(last,row_ind)][dimension]
-	var lastval=self.get_cell_atlas_coords(cur_cell)
-	var best:int=0
-	
-	while cur_cell[1-dimension]<=self.halfsize[1-dimension]:
-		var curval=self.get_cell_atlas_coords(cur_cell)
-		if curval!=lastval:
-			var cur=cur_cell[1-dimension]
-			var curdiff=cur-last
-			last=cur
-			lastval=curval
-			if best<5 and curdiff>=5:
-				print("CLEAR BOARD!")
-			if best<curdiff:
-				best=curdiff
-		cur_cell+=DIRECTION
-	return best
-
-func search_for_best_substitution(dimension:int,use_next:bool,row_ind:int)->Vector3i:
-	dimension%=2
-	
-	var used_one:Dictionary={}
-	var used_one_first:Dictionary={}
-	
-	var last:int=-self.halfsize[dimension]
-	var cur_cell=Vector2i.ONE*(-last)
-	cur_cell[dimension]=row_ind
-	var lastval=-Vector2i.RIGHT
-	
-	var best_pos:Vector2i=cur_cell
-	var best_val:int=0
-	
-	var SIDE_MOVE:Vector2i=Vector2i.ZERO
-	SIDE_MOVE[dimension]=1 if use_next else -1
-	
-	for i in range(-self.halfsize[dimension],self.halfsize[dimension]):
-		cur_cell[1-dimension]=i
-		var cur_val=self.get_cell_atlas_coords(cur_cell)
-		for key in used_one:
-			if key==cur_val:
-				continue
-			var used_loc:Vector2i=used_one[key]
-			used_one.erase(key)
-			var start:int=used_one_first[key]
-			used_one_first.erase(key)
-			var diff=i-start
-			if diff>best_val:
-				best_val=diff
-				best_pos=used_loc
-		var orthogonal:Vector2i=cur_cell+SIDE_MOVE
-		var ort_val=self.get_cell_atlas_coords(orthogonal)
-		if ort_val!=cur_val:
-			used_one[ort_val]=i
-			used_one_first[ort_val]=i if ort_val!=lastval else last
-		if cur_val!=lastval:
-			last=i
-			lastval=cur_val
-	return Vector3i(best_pos.x,best_pos.y,best_val)
-
-func search_for_best_dimension(dimension:int):
-	var res:Array[bool]=[]
 	var half=self.halfsize[dimension]
-	for i in range(half*2):
-		res.append(true)
-	for i in range(-half,half):
-		var cur_res=self.search_for_best_line(dimension,i)
-		if cur_res<5:
-			res[i]=cur_res==4
+	var cur_cell:Vector2i=-self.halfsize
+	cur_cell[1-dimension]=row_ind
+	var last_cell:Vector2i=cur_cell
+	var lastval=self.get_cell_atlas_coords(cur_cell)
+	cur_cell-=DIRECTION
+	while cur_cell[dimension] < half:
+		cur_cell+=DIRECTION
+		var curval = self.get_cell_atlas_coords(cur_cell)
+		if curval == lastval:
 			continue
-		res=[]
-		return res
-	return res
+		lastval=curval
+		var diff = cur_cell - last_cell
+		var seq_length = max(diff.x,diff.y)
+		while last_cell!=cur_cell:
+			var old:Vector2i=marked_board.get_cell_atlas_coords(last_cell)
+			old[dimension]=seq_length
+			marked_board.set_cell(last_cell,0,old)
+			last_cell+=DIRECTION
 
-func mark_line(dimension:int,row_ind:int,first,limit,output_board:BoardLayer):
-	var cell=-self.halfsize
-	cell[dimension]=row_ind
-	var count=0
-	for i in range(first,limit):
-		cell[1-dimension]=i
-		if output_board.get_cell_atlas_coords(cell)!=Vector2i.RIGHT:
-			count+=1
-		output_board.set_cell(cell,0,Vector2.RIGHT)
-	return count
-
-func mark_longs(dimension:int,row_ind:int,output_board:BoardLayer)->int:
-	dimension%=2
-	var DIRECTION=[Vector2i.DOWN,Vector2i.RIGHT][dimension]
-	
-	var last:int=-self.halfsize[dimension]
-	var cur_cell=[Vector2i(row_ind,last),Vector2i(last,row_ind)][dimension]
-	var lastval=self.get_cell_atlas_coords(cur_cell)
-	var mark_count=0
-	
-	while cur_cell[1-dimension]<=self.halfsize[1-dimension]:
-		var curval=self.get_cell_atlas_coords(cur_cell)
-		if curval!=lastval:
-			var cur=cur_cell[1-dimension]
-			if cur-last>=3 and lastval!=Vector2i.ZERO:
-				var temp=self.mark_line(dimension,row_ind,last,cur,output_board)
-				mark_count+=temp
-			last=cur
-			lastval=curval
-		cur_cell+=DIRECTION
-	return mark_count
-
-func mark_dimension(dimension:int,data:Array[bool],output_board:BoardLayer):
-	var half=self.halfsize[dimension]
-	var other_half=self.halfsize[1-dimension]
-	var mark_count=0
-	var temp=0
+func cmb_dim(dimension:int,marked_board:BoardLayer):
+	var half=self.halfsize[1-dimension]
 	for i in range(-half,half):
-		if data[i]:
-			temp=self.mark_line(dimension,i,-other_half,other_half,output_board)
-		else:
-			temp=self.mark_longs(dimension,i,output_board)
-		mark_count+=temp
-	return mark_count
+		cmb_line(dimension,i,marked_board)
 
-func search_and_mark(output_board:BoardLayer):
-	var whole_cols:Array[bool]=[]
-	var whole_rows:Array[bool]=[]
-	whole_cols=self.search_for_best_dimension(0)
-	if not whole_cols.is_empty():
-		whole_rows=self.search_for_best_dimension(1)
-	if whole_rows.is_empty():
-		self.fill_square(-self.halfsize,self.halfsize,Vector2i.ZERO)
-		output_board.fill_square(-self.halfsize,self.halfsize,Vector2i.RIGHT)
-		return self.halfsize[0]*self.halfsize[1]*4
-	var mark_count=0
-	mark_count+=self.mark_dimension(0,whole_cols,output_board)
-	mark_count+=self.mark_dimension(1,whole_rows,output_board)
-	# self.conditional_fill(output_board,Vector2i.ONE,Vector2i.ZERO)
-	return mark_count
+func create_marked_board(marked_board:BoardLayer):
+	assert(self.halfsize!=Vector2i.ZERO)
+	assert(marked_board.halfsize!=Vector2i.ZERO)
+	for i in range(2):
+		cmb_dim(i,marked_board)
+	return
 
 # Falling board interactions --------------------------------------------------------------------- #
 func swap_floating(falling_board:BoardLayer):
